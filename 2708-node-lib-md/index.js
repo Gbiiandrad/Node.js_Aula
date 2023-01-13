@@ -1,6 +1,20 @@
 import fs from 'fs';
 import chalk, { chalkStderr } from 'chalk';
 
+// para teste de espressão regulares
+
+
+function extraiLinks (texto) {
+    const regex = / \[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\) /gm;
+
+    const capturas = [...texto.matchAll(regex)];
+
+    
+    const resultados = capturas.map (capturas => ( { [capturas[1]]: [capturas[2]] }) );
+
+    return resultados;
+}
+
 // Caso o arquivo não for encontrado "Mensagem de erro"
 function trataErro(erro) {
     console.log(erro);
@@ -16,7 +30,7 @@ async function pegaArquivo(caminhoDoArquivo) {
         const encoding = 'utf-8';
         const texto = await fs.promises.readFile(caminhoDoArquivo, encoding);
     
-        console.log(chalk.green (texto)); // lembrando q o chalk é para colocar a cor 
+      console.log (extraiLinks(texto));
     } 
 
     catch (erro) {
@@ -25,5 +39,4 @@ async function pegaArquivo(caminhoDoArquivo) {
 }
 
 
-pegaArquivo('./arquivos/texto.md'); // certo
-pegaArquivo('./arquivos/'); // para a mensagem de erro
+ pegaArquivo('./arquivos/texto.md'); // certo
